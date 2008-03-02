@@ -13,15 +13,15 @@ Usage
 To use:
 
   # select 5 random results that match the :condition
-  @items = Item.random(5, :condition => ["col1 = ? or col2 = ?", val1, val2])
+  @items = Item.random(5, :conditions => ["col1 = ? or col2 = ?", val1, val2])
 
-The :condition argument is optional, :limit is required.  :order is ignored.
+The :conditions argument is optional.
 
 Limitations
 -----------
 
 Currently this plugin does not support joins.  Additionally the current implementation is considerably
-memory inefficient and probably won't perform well on tables with greater than 100,000 rows.  YMMV.
+memory inefficient and probably won't perform well on tables with greater than 50,000 rows.  YMMV.
 
 Benchmark
 ---------
@@ -32,3 +32,10 @@ $ ./script/performance/benchmarker 1 'Person.random(8)' 'Person.find(:all, :orde
             user     system      total        real
             #1      0.110000   0.000000   0.110000 (  0.203106)
             #2      0.000000   0.000000   0.000000 (  4.760947)
+
+Contact
+-------
+
+* Ben Tucker <ben@greenriver.org>
+
+Patches very much welcome.
