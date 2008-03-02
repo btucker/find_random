@@ -1,0 +1,34 @@
+Find Random
+==========
+
+The plugin provides a (somewhat) scalable way to select random rows from a table.  It runs
+significantly faster than asking most databases to "ORDER BY RAND()".  Behind the scenes it
+grabs all ids that match the query conditions, then selects a random subset of these for which 
+it then asks the database for the full records. The initial query is done outside of ActiveRecord
+to avoid needless object instantiation.
+
+Usage
+----
+
+To use:
+
+  # select 5 random results that match the :condition
+  @items = Item.random(5, :condition => ["col1 = ? or col2 = ?", val1, val2])
+
+The :condition argument is optional, :limit is required.  :order is ignored.
+
+Limitations
+-----------
+
+Currently this plugin does not support joins.  Additionally the current implementation is considerably
+memory inefficient and probably won't perform well on tables with greater than 100,000 rows.  YMMV.
+
+Benchmark
+---------
+
+Comparing this method against ORDER BY RAND() in MySQL on a table with 30,000 rows:
+
+$ ./script/performance/benchmarker 1 'Person.random(8)' 'Person.find(:all, :order => "RAND()", :limit => 8)'
+            user     system      total        real
+            #1      0.110000   0.000000   0.110000 (  0.203106)
+            #2      0.000000   0.000000   0.000000 (  4.760947)
