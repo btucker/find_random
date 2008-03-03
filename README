@@ -23,7 +23,7 @@ Limitations
 -----------
 
 Currently this plugin does not support joins.  Additionally the current implementation is considerably
-memory inefficient and probably won't perform well on tables with greater than 50,000 rows.  YMMV.
+memory inefficient and probably won't perform well on tables with greater than 100,000 rows.  YMMV.
 
 
 Benchmark
