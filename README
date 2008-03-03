@@ -7,16 +7,18 @@ grabs all ids that match the query conditions, then selects a random subset of t
 it then asks the database for the full records. The initial query is done outside of ActiveRecord
 to avoid needless object instantiation.
 
+If only one result is requested a different strategy is used.  First a query is done to determine 
+the number of results, then a single result is selected using a random offset.  This removes the
+memory inefficiency of the method used when selecting multiple results.
+
 Usage
 ----
 
-To use:
+  # select 5 random items that match the :conditions  
+  @items = Item.random(5, :conditions => ["col1 = ? or col2 = ?", val1, val2])  
 
-  # select 5 random itemss that match the :conditions
-  @items = Item.random(5, :conditions => ["col1 = ? or col2 = ?", val1, val2])
-
-  # select any 5 random items
-  @items = Item.random(5)
+  # select any 5 random items  
+  @items = Item.random(5)  
 
 
 Limitations
@@ -31,14 +33,14 @@ Benchmark
 
 Comparing this method against ORDER BY RAND() in MySQL on a table with 30,000 rows:
 
-  $ ./script/performance/benchmarker 1 'Person.random(8)' 'Person.find(:all, :order => "RAND()", :limit => 8)'
-            user     system      total        real
-            #1      0.030000   0.000000   0.030000 (  0.149027)
-            #2      0.000000   0.000000   0.000000 (  5.516728)
+  $ ./script/performance/benchmarker 1 'Person.random(8)' 'Person.find(:all, :order => "RAND()", :limit => 8)'  
+            user     system      total        real  
+            #1      0.030000   0.000000   0.030000 (  0.149027)  
+            #2      0.000000   0.000000   0.000000 (  5.516728)  
 
 Contact
 -------
 
 * Ben Tucker <ben@greenriver.org>
 
-Patches very much welcome.
+Patches/suggestions very much welcome.
