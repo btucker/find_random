@@ -1,0 +1,3 @@
+r175
+* Applied patch from Sergey Kojin which makes find_random work in the case
+  that the count of records are less than the limit requested
