@@ -12,7 +12,10 @@ module GreenRiver #:nodoc:
         options = args.last.is_a?(::Hash) ? args.pop : {}
         # if only one row is requested, use the strategy of getting the size of the
         # result set, and then in a second query offset by a random int of that
-        if limit == 1
+        case limit
+        when 0
+          []
+        when 1
           result_size = count(options)
           find(:first, options.merge(:offset => rand(result_size - 1)))
         else
