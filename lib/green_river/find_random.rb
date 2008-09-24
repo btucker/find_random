@@ -17,7 +17,8 @@ module GreenRiver #:nodoc:
           []
         when 1
           result_size = count(options)
-          find(:first, options.merge(:offset => rand(result_size - 1)))
+          offset = result_size == 1 ? 0 : rand(result_size - 1)
+          find(:first, options.merge(:offset => offset))
         else
           options[:select] = primary_key
           options.delete(:limit)
