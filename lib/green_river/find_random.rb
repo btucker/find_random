@@ -17,17 +17,25 @@ module GreenRiver #:nodoc:
           []
         when 1
           result_size = count(options)
-          offset = result_size == 1 ? 0 : rand(result_size - 1)
-          find(:first, options.merge(:offset => offset))
+          find(:first, options.merge(:offset => random_index(result_size)))
         else
           options[:select] = primary_key
           options.delete(:limit)
           options.delete(:order)
           sql = construct_finder_sql(options)
           all_ids = connection.select_all(sql, "#{name} Load IDs (find_random plugin)").collect!{|r| r['id']} 
-          find(Array.new([limit, all_ids.length].min){|i| all_ids.delete_at(rand(all_ids.length - 1))})
+          random_ids = Array.new([limit, all_ids.length].min){|i| all_ids.delete_at(random_index(all_ids.length))}
+          find(random_ids)
         end
       end
+
+      private
+        def random_index(length)
+          if (length <= 0)
+            raise ArgumentError.new("Cannot return random index for length of '#{length}'.")
+          end
+          return rand(length)
+        end
     end
   end
 end
