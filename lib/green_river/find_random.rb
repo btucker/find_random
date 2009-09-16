@@ -19,7 +19,7 @@ module GreenRiver #:nodoc:
           result_size = count(options)
           find(:first, options.merge(:offset => random_index(result_size)))
         else
-          options[:select] = primary_key
+          options[:select] = options[:joins].blank? ? primary_key : (quoted_table_name + '.' + primary_key)
           options.delete(:limit)
           options.delete(:order)
           sql = construct_finder_sql(options)
